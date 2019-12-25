@@ -1,30 +1,28 @@
 package com.bakyuz.asitakipson;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.provider.MediaStore;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,12 +31,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import static android.app.Activity.RESULT_OK;
 
-public class ProfilActivity extends AppCompatActivity {
-
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class ProfilActivityFragment extends Fragment {
 
     private static  final   int CHOOSE_IMAGE =101;
     ImageView imageView;
@@ -49,45 +49,45 @@ public class ProfilActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     String uID;
     FirebaseUser user;
+    Button resimKaydet;
     private FirebaseAuth mAuth;
+
+    public ProfilActivityFragment() {
+        // Required empty public constructor
+    }
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profil);
-
-
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_profil_activity, container, false);
+        mAuth = FirebaseAuth.getInstance();
+        uID = mAuth.getUid();
 
         firebaseAuth =FirebaseAuth.getInstance();
-        editText =(EditText)findViewById(R.id.editTextDisplayName);
-        imageView=(ImageView)findViewById(R.id.imageView);
-
-        progressBar = findViewById(R.id.progresbar) ;
+        editText =view.findViewById(R.id.editTextDisplayName);
+        imageView=view.findViewById(R.id.imageView);
+        resimKaydet = view.findViewById(R.id.buttonKaydet);
+        progressBar = view.findViewById(R.id.progresbar) ;
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showImageChooser();
             }
         });
-
-        mAuth = FirebaseAuth.getInstance();
-        Bundle extras = getIntent().getExtras();
-        uID = mAuth.getUid();
-        user=mAuth.getCurrentUser();
+        resimKaydet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resimKaydet();
+            }
+        });
         kullaniciBilgiGetir();
-
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(mAuth.getCurrentUser()==null){
-            finish();
-            startActivity(new Intent(this,MainActivity.class));
-        }
+        return view;
     }
 
     private void kullaniciBilgiGetir() {
-       // FirebaseUser user = mAuth.getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
         if(user!=null) {
             if (user.getPhotoUrl() != null) {
 
@@ -103,17 +103,16 @@ public class ProfilActivity extends AppCompatActivity {
 
     }
 
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == CHOOSE_IMAGE && resultCode==RESULT_OK && data!= null&& data.getData()!=null){
+        if(requestCode == CHOOSE_IMAGE && resultCode== RESULT_OK && data!= null&& data.getData()!=null){
 
 
             uriProfileImage = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uriProfileImage);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uriProfileImage);
                 imageView.setImageBitmap(bitmap);
                 uploadImageToFirebaseStorage(bitmap);
 
@@ -126,10 +125,6 @@ public class ProfilActivity extends AppCompatActivity {
 
     }
 
-    public  void resimKaydet(View v){
-
-        resimKaydet();
-    }
     private void showImageChooser(){
 
         Intent intent = new Intent();
@@ -137,6 +132,7 @@ public class ProfilActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,"Select Profile Image"), CHOOSE_IMAGE  );
     }
+
     private void uploadImageToFirebaseStorage(final Bitmap bitmap){
 
         final StorageReference profilFileImageRef =
@@ -177,7 +173,6 @@ public class ProfilActivity extends AppCompatActivity {
 
     }
 
-
     private void resimKaydet() {
 
         String displayName = editText.getText().toString();
@@ -199,51 +194,18 @@ public class ProfilActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(ProfilActivity.this, "Profil Güncellendi", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Profil Güncellendi", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
             new Thread(new Runnable() {
                 @Override
-                public void run() { Glide.get(ProfilActivity.this).clearDiskCache();
+                public void run() { Glide.get(getActivity()).clearDiskCache();
 
                 }
             }).start();
 
         }
     }
-    public void buttonAsiKaydet(View v) {
 
-        Intent i = new Intent(getApplicationContext(),AsiEkle.class);
-        i.putExtra("sendUD",uID);
-        startActivity(i);
-    }
-
-    public void buttonAsiListele(View v){
-
-        Intent i = new Intent(getApplicationContext(),AsiListele.class);
-        i.putExtra("sendUD",uID);
-        startActivity(i);
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
-                return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.menuLogout:
-                FirebaseAuth.getInstance().signOut();
-                finish();
-                startActivity(new Intent(this,MainActivity.class));
-
-        }
-        return true;
-    }
 }

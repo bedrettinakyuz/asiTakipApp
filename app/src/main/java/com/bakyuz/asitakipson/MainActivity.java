@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.onesignal.OneSignal;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,10 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(mAuth.getCurrentUser()!=null){
-            finish();
-            startActivity(new Intent(this,ProfilActivity.class));
-        }
+
     }
 
     @Override
@@ -38,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
         editTextEMail=(EditText)findViewById(R.id.text_email);
         editTextSifre=(EditText)findViewById(R.id.edit_text_password);
         mAuth = FirebaseAuth.getInstance();
+
+
+        //ONE SİGNAL
+
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
+
     }
 
     //ÜYE OL BUTTON
@@ -80,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
                     finish();
 
-                    Intent intent = new Intent(MainActivity.this,ProfilActivity.class);
+                    Intent intent = new Intent(MainActivity.this,tab.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
 

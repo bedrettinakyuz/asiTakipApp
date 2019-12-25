@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <dimen name="picker_selected_image_height">90dp</dimen>
+    <dimen name="picker_fab_size">60dp</dimen>
+    <dimen name="picker_camera_height">250dp</dimen>
+    <dimen name="logo_height">100dp</dimen>
+    <dimen name="list_sube_adi">17dp</dimen>
+    <dimen name="list_sube_description">14dp</dimen>
+    <dimen name="image_sube_width">60dp</dimen>
+    <dimen name="sube_padding_left_image">60dp</dimen>
+    <dimen name="image_sube_marginRight">15dp</dimen>
+    <dimen name="image_sube_padding">5dp</dimen>
+    <dimen name="list_layout_padding">1dp</dimen>
+
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="row_padding_vertical">10dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
+</resources>
