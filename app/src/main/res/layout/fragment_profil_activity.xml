@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Profil Resmi Eklemek İçin Kamera Resmine Tıklayın"
+            android:text="Aşı Takip Sistemi"
             android:textAlignment="center"
             />
         <RelativeLayout
@@ -28,7 +28,7 @@
                 android:layout_width="170dp"
                 android:layout_height="170dp"
                 android:layout_margin="20dp"
-                android:background="@drawable/icon_camera"
+                android:background="@drawable/ic_boy"
                 android:scaleType="centerCrop"/>
             <ProgressBar
                 android:visibility="gone"

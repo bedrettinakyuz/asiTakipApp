@@ -2,12 +2,16 @@ package com.bakyuz.asitakipson;
 
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -39,6 +43,8 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  */
 public class ProfilActivityFragment extends Fragment {
+
+    private static final int PERMISSION_REQUEST = 0;
 
     private static  final   int CHOOSE_IMAGE =101;
     ImageView imageView;
@@ -73,7 +79,7 @@ public class ProfilActivityFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showImageChooser();
+               // showImageChooser();
             }
         });
         resimKaydet.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +91,7 @@ public class ProfilActivityFragment extends Fragment {
         kullaniciBilgiGetir();
         return view;
     }
+
 
     private void kullaniciBilgiGetir() {
         FirebaseUser user = mAuth.getCurrentUser();
