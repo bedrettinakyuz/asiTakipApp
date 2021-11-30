@@ -59,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         Giris();
     }
 
+    public void btnSifremiUnuttum(View view)
+    {
+        startActivity(new Intent(MainActivity.this,SifremiUnuttum.class));
+    }
+
 
     private void Giris(){
 

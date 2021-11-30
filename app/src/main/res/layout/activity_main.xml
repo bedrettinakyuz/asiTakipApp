@@ -85,7 +85,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:paddingTop="5dp"
-                    android:text="Şifrenizi mi Unuttunuz?"/>
+                    android:text="Şifrenizi mi Unuttunuz?"
+                    android:onClick="btnSifremiUnuttum"/>
 
 
                 <Button
